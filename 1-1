@@ -1,0 +1,41 @@
+from drawman import *
+
+
+def calculate_angle(dx, dy):    # стрелка для оси ОХ
+    if dx > 0:
+        return atan(dy/dx)*180/pi
+    elif dx < 0:
+        if dy > 0:
+            return 180 + atan(dy/dx)*180/pi
+        else:
+            return -180 + atan(dy/dx)*180/pi
+    elif dx == 0:
+        if dy > 0:
+            return 90
+        else:
+            return -90
+
+def shift(dx, dy):            # диагональ для первой координатной четверти
+    global x, y
+    x += dx
+    y += dy
+    angle = calculate_angle(dx, dy)
+    length = (dx**2 + dy**2)**0.5
+    t.left(angle)
+    t.forward(length)
+    t.right(angle)
+
+x = 0
+y = 0
+shift(100, 100)
+shift(100, -100)
+shift(-100, -100)
+shift(-100, 100)
+
+shift(-100, 0)
+shift(0, -100)
+shift(100, 0)
+shift(0, 100)
+
+import time
+time.sleep(10)
