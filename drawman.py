@@ -1,5 +1,5 @@
 from turtle import Turtle
-default_scale = 15
+default_scale = 10
 
 def init_drawman():
     global t, x_current, y_current, _drawman_scale
@@ -46,6 +46,29 @@ def to_point(x, y):
     y_current = y
     t.goto(_drawman_scale*x_current, _drawman_scale*y_current)
 
+def calculate_angle(dx, dy):    # стрелка для оси ОХ
+    if dx > 0:
+        return atan(dy/dx)*180/pi
+    elif dx < 0:
+        if dy > 0:
+            return 180 + atan(dy/dx)*180/pi
+        else:
+            return -180 + atan(dy/dx)*180/pi
+    elif dx == 0:
+        if dy > 0:
+            return 90
+        else:
+            return -90
+
+def shift(dx, dy):            # диагональ для первой координатной четверти
+    global x, y
+    x += dx
+    y += dy
+    angle = calculate_angle(dx, dy)
+    length = (dx**2 + dy**2)**0.5
+    t.left(angle)
+    t.forward(length)
+    t.right(angle)
 
 init_drawman()
 if __name__ == '__main__':
