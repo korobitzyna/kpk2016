@@ -3,6 +3,7 @@ from math import *
 t = Turtle()
 x = 0
 y = 0
+drawman_scale = 40
 t.speed(100)
 
 def calculate_angle(dx, dy):
@@ -57,32 +58,36 @@ def coordinate_lines(x0 = 0, y0 = 0):
     penup()
     t.color(*current_color)
 
-def draw_grid(x0, y0):
+def draw_grid(x, y):
+    global drawman_scale
+    distance = drawman_scale
+    x0 = 0
+    y0 = 0
     current_color = t.color()
     t.color('grey')
     dx = window_width()/2
     dy = window_height()/2
     # x line
-    for i in range(int(dy/10)):
+    for i in range(1, int(int(dy)/distance)):
         penup()
-        goto(-dx, y0+10*i)
+        goto(-dx, y0+i*distance)
         pendown()
-        goto(+dx, y0+10*i)
+        goto(+dx, y0+i*distance)
         penup()
-        goto(-dx, -y0-10*i)
+        goto(-dx, -y0-i*distance)
         pendown()
-        goto(+dx, -y0-10*i)
+        goto(+dx, -y0-i*distance)
         penup()
     # y line
 
-    for i in range(int(dx/10)):
-        goto(x0+10*i, -dy)
+    for i in range(1, int(int(dx)/distance)):
+        goto(x0+i*distance, -dy)
         pendown()
-        goto(x0+10*i, +dy)
+        goto(x0+i*distance, +dy)
         penup()
-        goto(-x0-10*i, -dy)
+        goto(-x0-i*distance, -dy)
         pendown()
-        goto(-x0-10*i, +dy)
+        goto(-x0-i*distance, +dy)
         penup()
     t.color(*current_color)
 
@@ -97,6 +102,6 @@ def color(col):
 
 
 coordinate_lines(x, y)
-draw_grid(10, 10)
+draw_grid(x, y)
 import time
 time.sleep(100)
