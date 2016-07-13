@@ -8,18 +8,46 @@ x = 0
 y = 0
 t.speed(100)
 
-def draw_grid(x0, y0,distance):
-    global _drawman_scale
+def draw_grid(x0, y0):
     current_color = t.color()
     t.color('grey')
     dx = window_width()/2
     dy = window_height()/2
-    distance =_drawman_scale
-    goto(-distance,dy)
+    # x line
+    for i in range(int(dy/10)):
+        penup()
+        goto(-dx, y0+10*i)
+        pendown()
+        goto(+dx, y0+10*i)
+        penup()
+        goto(-dx, -y0-10*i)
+        pendown()
+        goto(+dx, -y0-10*i)
+        penup()
+    # y line
+
+    for i in range(int(dx/10)):
+        goto(x0+10*i, -dy)
+        pendown()
+        goto(x0+10*i, +dy)
+        penup()
+        goto(-x0-10*i, -dy)
+        pendown()
+        goto(-x0-10*i, +dy)
+        penup()
+    t.color(*current_color)
+
+def penup():
+    t.penup()
+
+def pendown():
     t.pendown()
-    goto(-distance,-dy)
 
+def color(col):
+    t.color(col)
 
-draw_grid(0,0, 10)
-sleep(10)
+draw_grid(10, 10)
+coordinate_lines(x, y)
+import time
+time.sleep(100)
 

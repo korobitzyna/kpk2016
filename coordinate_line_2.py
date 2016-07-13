@@ -5,7 +5,7 @@ x = 0
 y = 0
 t.speed(100)
 
-def calculate_angle(dx, dy):    # стрелка для оси ОХ
+def calculate_angle(dx, dy):
     if dx > 0:
         return atan(dy/dx)*180/pi
     elif dx < 0:
@@ -19,7 +19,7 @@ def calculate_angle(dx, dy):    # стрелка для оси ОХ
         else:
             return -90
 
-def shift(dx, dy):            # диагональ для первой координатной четверти
+def shift(dx, dy):
     global x, y
     x += dx
     y += dy
@@ -29,10 +29,10 @@ def shift(dx, dy):            # диагональ для первой коор�
     t.forward(length)
     t.right(angle)
 
-def goto(x1, y1):             # отрезок от текущего положения до Х1 У1
+def goto(x1, y1):
     shift(x1 - x, y1 - y)
 
-def coordinate_lines(x0 = 0, y0 = 0):# оси координат Х0 У0 - положение точки отсчёта в окне
+def coordinate_lines(x0 = 0, y0 = 0):
     current_color = t.color()
     t.color('blue')
     dx = window_width()/2
@@ -57,6 +57,35 @@ def coordinate_lines(x0 = 0, y0 = 0):# оси координат Х0 У0 - по�
     penup()
     t.color(*current_color)
 
+def draw_grid(x0, y0):
+    current_color = t.color()
+    t.color('grey')
+    dx = window_width()/2
+    dy = window_height()/2
+    # x line
+    for i in range(int(dy/10)):
+        penup()
+        goto(-dx, y0+10*i)
+        pendown()
+        goto(+dx, y0+10*i)
+        penup()
+        goto(-dx, -y0-10*i)
+        pendown()
+        goto(+dx, -y0-10*i)
+        penup()
+    # y line
+
+    for i in range(int(dx/10)):
+        goto(x0+10*i, -dy)
+        pendown()
+        goto(x0+10*i, +dy)
+        penup()
+        goto(-x0-10*i, -dy)
+        pendown()
+        goto(-x0-10*i, +dy)
+        penup()
+    t.color(*current_color)
+
 def penup():
     t.penup()
 
@@ -66,17 +95,8 @@ def pendown():
 def color(col):
     t.color(col)
 
-def draw_grid(x0, y0, distance):
-    t.color('grey')
-    goto(x0-distance, -window_width()/2)
-    t.pendown()
-    goto(x0-distance, window_width()/2)
-    t.penup()
-    goto(window_height, y0-distance)
-    t.pendown()
-    goto(-window_height, y0-distance)
 
-coordinate_lines(x0 = 0, y0 = 0)
-draw_grid(0, 0, 10)
+coordinate_lines(x, y)
+draw_grid(10, 10)
 import time
 time.sleep(100)
