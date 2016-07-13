@@ -68,15 +68,15 @@ def color(col):
 
 def draw_grid(x0, y0, distance):
     t.color('grey')
-    goto(x0-distance,-window_width()/2)
+    goto(x0-distance, -window_width()/2)
     t.pendown()
-    goto(x0-distance,window_width()/2)
+    goto(x0-distance, window_width()/2)
     t.penup()
-    goto(window_height,y0-distance)
+    goto(window_height, y0-distance)
     t.pendown()
-    goto(-window_height,y0-distance)
+    goto(-window_height, y0-distance)
 
 coordinate_lines(x0 = 0, y0 = 0)
-draw_grid(0,0, 10)
+draw_grid(0, 0, 10)
 import time
 time.sleep(100)
