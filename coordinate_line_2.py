@@ -1,6 +1,7 @@
 from drawman import *
+from time import sleep
 
-coordinate_lines(x, y)
-draw_grid(x, y)
-import time
-time.sleep(10)
+coordinate_lines()
+draw_grid()
+
+sleep(10)

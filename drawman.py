@@ -1,5 +1,9 @@
 from turtle import Turtle
-default_scale = 10
+from math import *
+
+default_scale = 40
+x = 0
+y = 0
 
 def init_drawman():
     global t, x_current, y_current, _drawman_scale, dx, dy
@@ -7,16 +11,16 @@ def init_drawman():
     t.penup()
     x_current = 0
     y_current = 0
-    dx = window_width()/2
-    dy = window_height()/2
+    dx = t.screen.window_width()/2
+    dy = t.screen.window_height()/2
     t.goto(x_current, y_current)
     drawman_scale(default_scale)
-
 
 
 def drawman_scale(scale):
     global _drawman_scale
     _drawman_scale = scale
+
 
 def test_drawman():
     """
@@ -49,7 +53,7 @@ def to_point(x, y):
     y_current = y
     t.goto(_drawman_scale*x_current, _drawman_scale*y_current)
 
-def calculate_angle(dx, dy):    # стрелка для оси ОХ
+def calculate_angle(dx, dy):
     if dx > 0:
         return atan(dy/dx)*180/pi
     elif dx < 0:
@@ -63,7 +67,7 @@ def calculate_angle(dx, dy):    # стрелка для оси ОХ
         else:
             return -90
 
-def shift(dx, dy):            # диагональ для первой координатной четверти
+def shift(dx, dy):
     global x, y
     x += dx
     y += dy
@@ -73,66 +77,65 @@ def shift(dx, dy):            # диагональ для первой коор�
     t.forward(length)
     t.right(angle)
 
+
 def drawman_goto(x1, y1):
     shift(x1 - x, y1 - y)
+
 
 def coordinate_lines(x0 = 0, y0 = 0):
     current_color = t.color()
     t.color('blue')
     # x line
-    t.goto(-dx, y0)
-    t.pendown()
-    t.goto(+dx, y0)
-    t.goto(dx - 10, y0 + 10)
-    t.goto(+dx, y0)
-    t.goto(dx - 10, y0 - 10)
-    t.goto(+dx, y0)
-    t.penup()
+    drawman_goto(-dx, y0)
+    pen_down()
+    drawman_goto(+dx, y0)
+    drawman_goto(dx - 10, y0 + 10)
+    drawman_goto(+dx, y0)
+    drawman_goto(dx - 10, y0 - 10)
+    drawman_goto(+dx, y0)
+    pen_up()
     # y line
-    t.goto(x0, -dy)
-    t.pendown()
-    t.goto(x0, +dy)
-    t.goto(x0 - 10, dy - 10)
-    t.goto(x0, +dy)
-    t.goto(x0 + 10, dy - 10)
-    t.goto(x0, +dy)
-    t.penup()
+    drawman_goto(x0, -dy)
+    pen_down()
+    drawman_goto(x0, +dy)
+    drawman_goto(x0 - 10, dy - 10)
+    drawman_goto(x0, +dy)
+    drawman_goto(x0 + 10, dy - 10)
+    drawman_goto(x0, +dy)
+    pen_up()
     t.color(*current_color)
 
-def draw_grid(x, y):
-    global drawman_scale, dx, dy
-    distance = drawman_scale
-    x0 = 0
-    y0 = 0
+def draw_grid(x0 = 0, y0 = 0):
+    distance = _drawman_scale
     current_color = t.color()
     t.color('grey')
     # x line
     for i in range(1, int(int(dy)/distance)):
-        t.penup()
-        t.goto(-dx, y0+i*distance)
-        t.pendown()
-        t.goto(+dx, y0+i*distance)
-        t.penup()
-        t.goto(-dx, -y0-i*distance)
-        t.pendown()
-        t.goto(+dx, -y0-i*distance)
-        t.penup()
+        pen_up()
+        drawman_goto(-dx, y0+i*distance)
+        pen_down()
+        drawman_goto(+dx, y0+i*distance)
+        pen_up()
+        drawman_goto(-dx, -y0-i*distance)
+        pen_down()
+        drawman_goto(+dx, -y0-i*distance)
+        pen_up()
     # y line
+
     for i in range(1, int(int(dx)/distance)):
-        t.goto(x0+i*distance, -dy)
-        t.pendown()
-        t.goto(x0+i*distance, +dy)
-        t.penup()
-        t.goto(-x0-i*distance, -dy)
-        t.pendown()
-        t.goto(-x0-i*distance, +dy)
-        t.penup()
+        drawman_goto(x0+i*distance, -dy)
+        pen_down()
+        drawman_goto(x0+i*distance, +dy)
+        pen_up()
+        drawman_goto(-x0-i*distance, -dy)
+        pen_down()
+        drawman_goto(-x0-i*distance, +dy)
+        pen_up()
     t.color(*current_color)
 
 
 init_drawman()
-coordinate_lines(x, y)
-draw_grid(x, y)
+
 if __name__ == '__main__':
     import time
     test_drawman()
