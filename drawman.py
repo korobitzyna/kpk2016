@@ -2,13 +2,16 @@ from turtle import Turtle
 default_scale = 10
 
 def init_drawman():
-    global t, x_current, y_current, _drawman_scale
+    global t, x_current, y_current, _drawman_scale, dx, dy
     t = Turtle()
     t.penup()
     x_current = 0
     y_current = 0
+    dx = window_width()/2
+    dy = window_height()/2
     t.goto(x_current, y_current)
     drawman_scale(default_scale)
+
 
 
 def drawman_scale(scale):
@@ -70,7 +73,66 @@ def shift(dx, dy):            # диагональ для первой коор�
     t.forward(length)
     t.right(angle)
 
+def drawman_goto(x1, y1):
+    shift(x1 - x, y1 - y)
+
+def coordinate_lines(x0 = 0, y0 = 0):
+    current_color = t.color()
+    t.color('blue')
+    # x line
+    t.goto(-dx, y0)
+    t.pendown()
+    t.goto(+dx, y0)
+    t.goto(dx - 10, y0 + 10)
+    t.goto(+dx, y0)
+    t.goto(dx - 10, y0 - 10)
+    t.goto(+dx, y0)
+    t.penup()
+    # y line
+    t.goto(x0, -dy)
+    t.pendown()
+    t.goto(x0, +dy)
+    t.goto(x0 - 10, dy - 10)
+    t.goto(x0, +dy)
+    t.goto(x0 + 10, dy - 10)
+    t.goto(x0, +dy)
+    t.penup()
+    t.color(*current_color)
+
+def draw_grid(x, y):
+    global drawman_scale, dx, dy
+    distance = drawman_scale
+    x0 = 0
+    y0 = 0
+    current_color = t.color()
+    t.color('grey')
+    # x line
+    for i in range(1, int(int(dy)/distance)):
+        t.penup()
+        t.goto(-dx, y0+i*distance)
+        t.pendown()
+        t.goto(+dx, y0+i*distance)
+        t.penup()
+        t.goto(-dx, -y0-i*distance)
+        t.pendown()
+        t.goto(+dx, -y0-i*distance)
+        t.penup()
+    # y line
+    for i in range(1, int(int(dx)/distance)):
+        t.goto(x0+i*distance, -dy)
+        t.pendown()
+        t.goto(x0+i*distance, +dy)
+        t.penup()
+        t.goto(-x0-i*distance, -dy)
+        t.pendown()
+        t.goto(-x0-i*distance, +dy)
+        t.penup()
+    t.color(*current_color)
+
+
 init_drawman()
+coordinate_lines(x, y)
+draw_grid(x, y)
 if __name__ == '__main__':
     import time
     test_drawman()
