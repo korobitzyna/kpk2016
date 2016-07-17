@@ -5,7 +5,9 @@ ball_initial_number = 20
 ball_minimal_radius = 15
 ball_maximal_radius = 40
 ball_available_colors = ['green', 'blue', 'red', 'lightgray', '#FF00FF', '#FFFF00']
-ball_recruited_sum = 0
+ball_recruited_sum = 1
+ball_speed_decrease = 1
+ball_speed_increases = 1
 
 def click_ball(event):
     """ Обработчик событий мышки для игрового холста canvas
@@ -15,7 +17,7 @@ def click_ball(event):
     """
     obj = canvas.find_closest(event.x, event.y)
     x1, y1, x2, y2 = canvas.coords(obj)
-
+    create_random_ball()
     if x1 <= event.x <= x2 and y1 <= event.y <= y2:
         canvas.delete(obj)
         create_random_ball()
@@ -42,10 +44,12 @@ def create_random_ball():
     создаёт шарик в случайном месте игрового холста canvas,
      при этом шарик не выходит за границы холста!
     """
-    R = randint(ball_minimal_radius, ball_maximal_radius)
-    x = randint(0, int(canvas['width'])-1-2*R)
-    y = randint(0, int(canvas['height'])-1-2*R)
-    canvas.create_oval(x, y, x+2*R, y+2*R, width=1, fill=random_color())
+    global ball_recruited_sum
+    for i in range(ball_recruited_sum):
+        R = randint(ball_minimal_radius, ball_maximal_radius)
+        x = randint(0, int(canvas['width'])-1-2*R)
+        y = randint(0, int(canvas['height'])-1-2*R)
+        canvas.create_oval(x, y, x+2*R, y+2*R, width=1, fill=random_color())
 
 
 def random_color():
