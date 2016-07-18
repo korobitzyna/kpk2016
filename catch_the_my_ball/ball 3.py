@@ -14,17 +14,16 @@ def click_ball(event):
     По клику мышкой нужно удалять тот объект, на который мышка указывает.
     А также засчитываеть его в очки пользователя.
     """
-    global ball_maximal_radius, ball_speed_decrease
+    global ball_maximal_radius, ball_minimal_radius, ball_speed_decrease
     obj = canvas.find_closest(event.x, event.y)
     x1, y1, x2, y2 = canvas.coords(obj)
     if x1 <= event.x <= x2 and y1 <= event.y <= y2:
         canvas.delete(obj)
         create_random_ball()
         ball_maximal_radius -= 1 #максимальный радиус шарика уменьшается
-        if ball_minimal_radius >= ball_maximal_radius:
-            ball_speed_decrease -= 1 #скорость появления шариков уменьшается
-        else:
-            ball_speed_decrease += 1 #скорость появления шариков увеличивается
+        if ball_minimal_radius > ball_maximal_radius:
+            ball_minimal_radius, ball_maximal_radius = ball_maximal_radius, ball_minimal_radius
+            ball_speed_decrease += 1
         ball_sum() # счетчик собранных шариков
 
 def ball_sum():
@@ -39,6 +38,7 @@ def move_all_balls(event):
     for obj in canvas.find_all():
         dx = randint(-1, 1)
         dy = randint(-1, 1)
+
         canvas.move(obj, dx, dy)
 
 def create_random_ball():
@@ -46,10 +46,10 @@ def create_random_ball():
     создаёт шарик в случайном месте игрового холста canvas,
      при этом шарик не выходит за границы холста
     """
-    global ball_speed_decrease,  ball_minimal_radius, ball_maximal_radius
+    global ball_minimal_radius, ball_maximal_radius, ball_speed_decrease
     for i in range(ball_speed_decrease+1):
-        if ball_minimal_radius >= ball_maximal_radius:
-            ball_minimal_radius, ball_maximal_radius = ball_maximal_radius, ball_minimal_radius
+        if ball_maximal_radius < 10:
+            ball_speed_decrease = -1
         else:
             R = randint(ball_minimal_radius, ball_maximal_radius)
             x = randint(0, int(canvas['width'])-1-2*R)
@@ -83,21 +83,18 @@ def init_main_window():
     canvas.pack()
 
 def init_window_2():
-    global root2, canvas2, label2, label3,ball_recruited_sum, scala
+    global root2, label2, label3
 
     root2 = tkinter.Toplevel()
     label2 = tkinter.Label(root2, text="Приходите поиграть ещё!")
     label3_text = "Вы набрали " + str(ball_recruited_sum) +" баллов"
     label3 = tkinter.Label(root2, text=label3_text)
-    label4_text = "Максимальный радиус " + str(ball_maximal_radius)
-    label4 = tkinter.Label(root2, text=label4_text)
-    for obj in label2, label3, label4:
+    for obj in label2, label3:
         obj.pack()
     root2.mainloop()
 
 def game_over():
     # выводит итог игры
-    global ball_recruited_sum, ball_maximal_radius
     init_window_2()
     print("Приходите поиграть ещё!")
     print("Вы набрали", ball_recruited_sum, "баллов")
