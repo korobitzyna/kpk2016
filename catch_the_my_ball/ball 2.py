@@ -42,7 +42,6 @@ def create_random_ball():
     создаёт шарик в случайном месте игрового холста canvas,
      при этом шарик не выходит за границы холста!
     """
-    global ball_recruited_sum
     for i in range(ball_recruited_sum):
         R = randint(ball_minimal_radius, ball_maximal_radius)
         x = randint(0, int(canvas['width'])-1-2*R)
