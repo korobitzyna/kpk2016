@@ -25,7 +25,6 @@ def click_ball(event):
         if ball_minimal_radius > ball_maximal_radius:
             ball_minimal_radius, ball_maximal_radius = ball_maximal_radius, ball_minimal_radius
             ball_speed_decrease += 1
-
     ball_sum() # счетчик собранных шариков
 
 
@@ -37,16 +36,13 @@ def ball_sum():
     ballsum.set(ballsum.get()+1)   #изменяем значение переменной ballsum,
     # которая связана с текстом Label3
 
-
 def move_all_balls(event):
     """ передвигает все шарики на чуть-чуть НО выходят за границы холста
     """
     for obj in canvas.find_all():
         dx = randint(-1, 1)
         dy = randint(-1, 1)
-
         canvas.move(obj, dx, dy)
-
 
 def create_random_ball():
     """
@@ -62,8 +58,6 @@ def create_random_ball():
             x = randint(0, int(canvas['width'])-1-2*R)
             y = randint(0, int(canvas['height'])-1-2*R)
             canvas.create_oval(x, y, x+2*R, y+2*R, width=1, fill=random_color())
-
-
 
 def random_color():
     """
@@ -97,6 +91,8 @@ def init_main_window():
     label2 = tkinter.Label(child, text="Количество набранных баллов")
     label2.pack()
     ballsum = tkinter.IntVar(0) #создаем переменную, которую можно свящать с виджетом (например с Label)
+    # хранит сумму баллов, связана с объектом Label3,
+    #с изменением значения переменной ballsum, менятся текст Label3
     # хранит сумму баллов, связана с объектом Label3,
     #с изменением значения переменной ballsum, менятся текст Label3
     label3 = tkinter.Label(child, textvariable=ballsum)
