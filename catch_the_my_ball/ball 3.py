@@ -8,11 +8,12 @@ ball_maximal_radius = 40
 ball_available_colors = ['green', 'blue', 'red', 'lightgray', '#FF00FF', '#FFFF00']
 ball_recruited_sum = 0
 ball_speed_decrease = 0
+
 def click_ball(event):
     """ Обработчик событий мышки для игрового холста canvas
-    :param event: событие с координатами клика
-    По клику мышкой нужно удалять тот объект, на который мышка указывает.
-    А также засчитываеть его в очки пользователя.
+ :param event: событие с координатами клика
+ По клику мышкой нужно удалять тот объект, на который мышка указывает.
+ А также засчитываеть его в очки пользователя.
     """
     global ball_maximal_radius, ball_minimal_radius, ball_speed_decrease
     obj = canvas.find_closest(event.x, event.y)
@@ -24,12 +25,17 @@ def click_ball(event):
         if ball_minimal_radius > ball_maximal_radius:
             ball_minimal_radius, ball_maximal_radius = ball_maximal_radius, ball_minimal_radius
             ball_speed_decrease += 1
-        ball_sum() # счетчик собранных шариков
+
+    ball_sum() # счетчик собранных шариков
+
 
 def ball_sum():
     # подсчет суммы баллов
-    global ball_recruited_sum
+    global ball_recruited_sum, ballsum
+
     ball_recruited_sum += 1
+    ballsum.set(ballsum.get()+1)   #изменяем значение переменной ballsum,
+    # которая связана с текстом Label3
 
 
 def move_all_balls(event):
@@ -41,10 +47,11 @@ def move_all_balls(event):
 
         canvas.move(obj, dx, dy)
 
+
 def create_random_ball():
     """
-    создаёт шарик в случайном месте игрового холста canvas,
-     при этом шарик не выходит за границы холста
+ создаёт шарик в случайном месте игрового холста canvas,
+ при этом шарик не выходит за границы холста
     """
     global ball_minimal_radius, ball_maximal_radius, ball_speed_decrease
     for i in range(ball_speed_decrease+1):
@@ -60,50 +67,46 @@ def create_random_ball():
 
 def random_color():
     """
-    :return: Случайный цвет из некоторого набора цветов
+ :return: Случайный цвет из некоторого набора цветов
     """
     return choice(ball_available_colors)
 
 
 def init_ball_catch_game():
     """
-    Создаём необходимое для игры количество шариков, по которым нужно будет кликать.
+ Создаём необходимое для игры количество шариков, по которым нужно будет кликать.
     """
     for i in range(ball_initial_number):
         create_random_ball()
 
-def init_main_window():
-    global root, canvas
 
+def init_main_window():
+    global root, canvas, ballsum
+
+    #создание главного игрового окна
     root = tkinter.Tk()
     canvas = tkinter.Canvas(root, background='white', width=400, height=400)
     canvas.bind("<Button>", click_ball)
     canvas.bind("<Motion>", move_all_balls)
     canvas.pack()
-    canvas.pack()
 
-def init_window_2():
-    global root2, label2, label3
+    #создание дочернего окна
+    child = tkinter.Toplevel(root)
+    child.title('Статистика игры')
 
-    root2 = tkinter.Toplevel()
-    label2 = tkinter.Label(root2, text="Приходите поиграть ещё!")
-    label3_text = "Вы набрали " + str(ball_recruited_sum) +" баллов"
-    label3 = tkinter.Label(root2, text=label3_text)
-    for obj in label2, label3:
-        obj.pack()
-    root2.mainloop()
-
-def game_over():
-    # выводит итог игры
-    init_window_2()
-    print("Приходите поиграть ещё!")
-    print("Вы набрали", ball_recruited_sum, "баллов")
-    print("максимальный радиус", ball_maximal_radius)
-    exit()
+    label2 = tkinter.Label(child, text="Количество набранных баллов")
+    label2.pack()
+    ballsum = tkinter.IntVar(0) #создаем переменную, которую можно свящать с виджетом (например с Label)
+    # хранит сумму баллов, связана с объектом Label3,
+    #с изменением значения переменной ballsum, менятся текст Label3
+    label3 = tkinter.Label(child, textvariable=ballsum)
+    label3.pack()
 
 
 if __name__ == "__main__":
     init_main_window()
     init_ball_catch_game()
     root.mainloop()
-    game_over()
+    print("Приходите поиграть ещё!")
+    print("Вы набрали", ball_recruited_sum, "баллов")
+    print("максимальный радиус", ball_maximal_radius)
